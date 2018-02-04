@@ -15,6 +15,12 @@ class user_Main extends JFrame implements ActionListener{
   public static int b_hands[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   public static int a_field[] = {0, 0, 0, 0, 0, 0};
   public static int b_field[] = {0, 0, 0, 0, 0, 0};
+  
+  public static int a_stateH[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  public static int b_stateH[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  public static int a_stateF[] = {0, 0, 0, 0, 0, 0};
+  public static int b_stateF[] = {0, 0, 0, 0, 0, 0};
+  
   public static int a = 0;
   public static int b = 0;
 
@@ -36,24 +42,54 @@ class user_Main extends JFrame implements ActionListener{
   public static JButton playerA = new JButton();
   public static JButton playerB = new JButton();
   
-  public static JButton reset = new JButton("RESET");
-  public static JButton turnend = new JButton("TURN END");
+  public static JButton putally = new JButton("味方を配置");
+  public static JButton attenem = new JButton("敵を攻撃");
+  public static JButton turnend = new JButton("ターンを終了");
+  public static JButton reset = new JButton("取り消し");
 
   public static void main(String args[]){
     user_Main frame = new user_Main();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setBounds(200, 200, 800, 500);
+    frame.setBounds(200, 200, 800, 600);
     frame.setTitle("タイトル");
     frame.setVisible(true);
     tennokoe.setText("こんにちわ");
     /* 手札の設定 */
     for(int i = 0; i < 10; i++){
-      aHands[i].setIcon(type[(int)(Math.random() * 3 + 1)]);
-      bHands[i].setIcon(type[(int)(Math.random() * 3 + 1)]);
+      int a = (int)(Math.random() * 3 + 1);
+      int b = (int)(Math.random() * 3 + 1);
+      aHands[i].setIcon(type[a]);
+      a_stateH[i] = a;
+      bHands[i].setIcon(type[b]);
+      b_stateH[i] = b;
     }
-    while(a_hp == 0 || b_hp == 0){
-      if(a_hands.indexOf(1) != -1){
-        aHands[a_hands.indexOf(1)].setEnabled(false);
+    boolean hand = false;
+    int id = 0;
+    while(a_hp != 0 && b_hp != 0){
+      for(int i = 0; i < 10; i++){
+        if(a_hands[i] == 1){
+          aHands[i].setIcon(type[0]);
+          hand = true;
+          id = i;
+          break;
+        }if(b_hands[i] == 1){
+          bHands[i].setIcon(type[0]);
+          hand = true;
+          id = i;
+          break;
+        }
+      }
+      if(hand == true){
+        for(int i = 0; i < 6; i++){
+          if(a_field[i] == 1){
+            aField[i].setIcon(type[a_stateH[id]]);
+            break;
+          }
+          if(a_field[i] == 1){
+            aField[i].setIcon(type[a_stateH[id]]);
+            break;
+          }
+        }
       }
     }
   }
@@ -195,13 +231,5 @@ class user_Main extends JFrame implements ActionListener{
     }
     if(btn == playerA) a = 1;
     else if(btn == playerB) b = 1;
-    
-    System.out.println(Arrays.toString(a_field));
-    System.out.println(Arrays.toString(b_field));
-    System.out.println(Arrays.toString(a_hands));
-    System.out.println(Arrays.toString(b_hands));
-    System.out.println(Integer.toString(a));
-    System.out.println(Integer.toString(b));
-    System.out.println();
   }
 }
