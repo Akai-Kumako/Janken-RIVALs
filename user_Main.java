@@ -1,108 +1,137 @@
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List; 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+import javax.swing.border.LineBorder;
 
 class user_Main extends JFrame implements ActionListener{
 
   JPanel panel;
   CardLayout layout;
 
-  public static int a_hands[] = {1, 2, 3, 1, 2, 3, 1, 2, 3, 1};
-  public static int b_hands[] = {1, 2, 3, 1, 2, 3, 1, 2, 3, 1};
-  public static int a_field[][] = {{0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0}};
-  public static int b_field[][] = {{1, 2, 3, 1, 2, 3}, {0, 0, 0, 0, 0, 9}};
+  public static int a_hands[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  public static int b_hands[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  public static int a_field[] = {0, 0, 0, 0, 0, 0};
+  public static int b_field[] = {0, 0, 0, 0, 0, 0};
+  public static int a = 0;
+  public static int b = 0;
 
   public static int a_hp = 6;
   public static int b_hp = 6;
+  
+  public static JLabel tennokoe = new JLabel("ooo");
+
+  public static ImageIcon[] type = new ImageIcon[4];
+
+  public static ImageIcon[] stateW = new ImageIcon[7];
+  public static ImageIcon[] stateM = new ImageIcon[7];
+
+  public static JButton[] aField = new JButton[6];
+  public static JButton[] bField = new JButton[6];
+  public static JButton[] aHands = new JButton[10];
+  public static JButton[] bHands = new JButton[10];
+    
+  public static JButton playerA = new JButton();
+  public static JButton playerB = new JButton();
+  
+  public static JButton reset = new JButton("RESET");
+  public static JButton turnend = new JButton("TURN END");
 
   public static void main(String args[]){
     user_Main frame = new user_Main();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setBounds(200, 200, 800, 400);
+    frame.setBounds(200, 200, 800, 500);
     frame.setTitle("タイトル");
     frame.setVisible(true);
-    while(true){
-      printField();
-      doneCommand();
+    tennokoe.setText("こんにちわ");
+    /* 手札の設定 */
+    for(int i = 0; i < 10; i++){
+      aHands[i].setIcon(type[(int)(Math.random() * 3 + 1)]);
+      bHands[i].setIcon(type[(int)(Math.random() * 3 + 1)]);
+    }
+    while(a_hp == 0 || b_hp == 0){
+      if(a_hands.indexOf(1) != -1){
+        aHands[a_hands.indexOf(1)].setEnabled(false);
+      }
     }
   }
 
   user_Main(){
 
-    JLabel tennokoe = new JLabel("天の声");
-
-    Button playerA = new Button("PlayerA");
-    Button playerB = new Button("PlayerB");
+    tennokoe.setFont(new Font("MS ゴシック", Font.BOLD, 20));
+    
+    type[0] = new ImageIcon("./none.png");
+    type[1] = new ImageIcon("./rock.png");
+    type[2] = new ImageIcon("./paper.png");
+    type[3] = new ImageIcon("./scissors.png");
+    
+    stateW[0] = new ImageIcon("./w0.png");
+    stateW[1] = new ImageIcon("./w1.png");
+    stateW[2] = new ImageIcon("./w2.png");
+    stateW[3] = new ImageIcon("./w3.png");
+    stateW[4] = new ImageIcon("./w4.png");
+    stateW[5] = new ImageIcon("./w5.png");
+    stateW[6] = new ImageIcon("./w6.png");
+    stateM[0] = new ImageIcon("./m0.png");
+    stateM[1] = new ImageIcon("./m1.png");
+    stateM[2] = new ImageIcon("./m2.png");
+    stateM[3] = new ImageIcon("./m3.png");
+    stateM[4] = new ImageIcon("./m4.png");
+    stateM[5] = new ImageIcon("./m5.png");
+    stateM[6] = new ImageIcon("./m6.png");
+    
+    for(int i = 0; i < 10; i++){
+      aHands[i] = new JButton(type[0]);
+      aHands[i].addActionListener(this);
+      aHands[i].setBackground(Color.RED);
+      bHands[i] = new JButton(type[0]);
+      bHands[i].addActionListener(this);
+      bHands[i].setBackground(Color.BLUE);
+    }
+    
+    for(int i = 0; i < 6; i++){
+      aField[i] = new JButton(type[0]);
+      aField[i].addActionListener(this);
+      bField[i] = new JButton(type[0]);
+      bField[i].addActionListener(this);
+    }
    
-    Button a1 = new Button("one");
-    Button a2 = new Button("two");
-    Button a3 = new Button("three");
-    Button a4 = new Button("four");
-    Button a5 = new Button("five");
-    Button a6 = new Button("six");
-
-    Button b1 = new Button("one");
-    Button b2 = new Button("one");
-    Button b3 = new Button("one");
-    Button b4 = new Button("one");
-    Button b5 = new Button("one");
-    Button b6 = new Button("one");
-
-    Button aA = new Button("one");
-    Button aB = new Button("one");
-    Button aC = new Button("one");
-    Button aD = new Button("one");
-    Button aE = new Button("one");
-    Button aF = new Button("one");
-    Button aG = new Button("one");
-    Button aH = new Button("one");
-    Button aI = new Button("one");
-    Button aJ = new Button("one");
+    playerA.setIcon(stateM[6]);
+    playerA.addActionListener(this);
+    playerB.setIcon(stateW[6]);
+    playerB.addActionListener(this);
     
-    Button bA = new Button("one");
-    Button bB = new Button("one");
-    Button bC = new Button("one");
-    Button bD = new Button("one");
-    Button bE = new Button("one");
-    Button bF = new Button("one");
-    Button bG = new Button("one");
-    Button bH = new Button("one");
-    Button bI = new Button("one");
-    Button bJ = new Button("one");
-    
+    reset.addActionListener(this);
+    turnend.addActionListener(this);
+  
     /* 対戦ページ */
     JPanel pA = new JPanel();
     pA.setLayout(new GridLayout(3, 2));
-    pA.add(a1);    
-    pA.add(a2);    
-    pA.add(a3);    
-    pA.add(a4);    
-    pA.add(a5);    
-    pA.add(a6);    
+    for(int i = 0; i < 6; i++)
+      pA.add(aField[i]);
 
     JPanel pB = new JPanel();
     pB.setLayout(new GridLayout(3, 2));
-    pB.add(b1);    
-    pB.add(b2);    
-    pB.add(b3);    
-    pB.add(b4);    
-    pB.add(b5);    
-    pB.add(b6);    
+    for(int i = 0; i < 6; i++)
+      pB.add(bField[i]);
 
     JPanel hands = new JPanel();
-    hands.setLayout(new GridLayout(0, 10));
-    hands.add(aA);
-    hands.add(aB);
-    hands.add(aC);
-    hands.add(aD);
-    hands.add(aE);
-    hands.add(aF);
-    hands.add(aG);
-    hands.add(aH);
-    hands.add(aI);
-    hands.add(aJ);
+    hands.setLayout(new GridLayout(2, 10));
+    for(int i = 0; i < 5; i++)
+      hands.add(aHands[i]);
+    for(int i = 0; i < 5; i++)
+      hands.add(bHands[i]);
+    for(int i = 5; i < 10; i++)
+      hands.add(aHands[i]);
+    for(int i = 5; i < 10; i++)
+      hands.add(bHands[i]);
+
+    JPanel operate = new JPanel();
+    operate.setLayout(new FlowLayout());
+    operate.add(reset);
+    operate.add(turnend);
 
     JPanel card1 = new JPanel();
     card1.setLayout(new GridLayout(0, 4));
@@ -116,111 +145,63 @@ class user_Main extends JFrame implements ActionListener{
     all.add(tennokoe);
     all.add(card1);
     all.add(hands);
+    all.add(operate);
 
     /* CardLayout準備 */
     this.panel = new JPanel();
     this.layout = new CardLayout();//CardLayoutの作成
     this.panel.setLayout(this.layout);
-    /* panelにViewを追加 */
     this.panel.add(all, "View1");
     
-    /* カード移動用ボタン */
-    JButton button1 = new JButton("View1");
-    button1.addActionListener(this);
-    button1.setActionCommand("View1");
-
-    JButton button2 = new JButton("View2");
-    button2.addActionListener(this);
-    button2.setActionCommand("View2");
-
-    JPanel btnPanel = new JPanel();
-    btnPanel.add(button1);
-    btnPanel.add(button2);
-
     getContentPane().add(this.panel, BorderLayout.CENTER);
-    getContentPane().add(btnPanel, BorderLayout.PAGE_END);
   }
   public void actionPerformed(ActionEvent e) {
     // TODO 自動生成されたメソッド・スタブ
     String cmd = e.getActionCommand();
     layout.show(this.panel,cmd);
-  }
-
-  public static void doneCommand(){
-    System.out.println("----------------------------");
-    System.out.println("  味方の手を配置 a");
-    System.out.println("  相手の手を攻撃 b");
-    System.out.println("  相手プレイヤーを攻撃 c");
-    System.out.println("  ターンを終える d");
-    System.out.println("----------------------------");
-    System.out.print(" > コマンドを入力してください: ");
-    Scanner scan = new Scanner(System.in);
-    String str = scan.next();
-
-    if(str.equals("a")) arrangement();
-    if(str.equals("b")) attackJ();
-    if(str.equals("c")) attackP();
-    if(str.equals("d")) turnEnd(); 
-  }
-
-  public static void printField(){
-    System.out.println("   ========  ========");
-    System.out.println("   = " + a_field[0][0] + "  " + a_field[0][3] + " =  = " + b_field[0][3] + "  " + b_field[0][0] + " =");
-    System.out.println("   =      =  =      =");
-    System.out.println(" " + a_hp + " = " + a_field[0][1] + "  " + a_field[0][4] + " =  = " + b_field[0][4] + "  " + b_field[0][1] + " = " + b_hp);
-    System.out.println("   =      =  =      =");
-    System.out.println("   = " + a_field[0][2] + "  " + a_field[0][5] + " =  = " + b_field[0][5] + "  " + b_field[0][2] + " =");
-    System.out.println("   ========  ========");
+    JButton btn = null;
+    if(e.getSource() instanceof JButton){
+      btn = (JButton)e.getSource();
+      for(int i = 0; i < 6; i++){
+        a_field[i] = 0;
+        b_field[i] = 0;
+      }
+      for(int i = 0; i < 10; i++){
+        a_hands[i] = 0;
+        b_hands[i] = 0;
+      }
+      a = 0;
+      b = 0;
+    }
+    for(int i = 0; i < 6; i++){
+      if(btn == aField[i]){
+        a_field[i] = 1;
+        break;
+      }
+      if(btn == bField[i]){
+        b_field[i] = 1;
+        break;
+      }
+    }
     for(int i = 0; i < 10; i++){
-      System.out.print(a_hands[i] + " ");
+      if(btn == aHands[i]){
+        a_hands[i] = 1;
+        break;
+      }
+      if(btn == bHands[i]){
+        b_hands[i] = 1;
+        break;
+      }
     }
+    if(btn == playerA) a = 1;
+    else if(btn == playerB) b = 1;
+    
+    System.out.println(Arrays.toString(a_field));
+    System.out.println(Arrays.toString(b_field));
+    System.out.println(Arrays.toString(a_hands));
+    System.out.println(Arrays.toString(b_hands));
+    System.out.println(Integer.toString(a));
+    System.out.println(Integer.toString(b));
     System.out.println();
-  }
-
-  public static void arrangement(){
-    //System.out.println("味方の手を配置します.");
-    System.out.print(" > 何番目の手を場に配置しますか?: ");
-    Scanner hand = new Scanner(System.in);
-    String Thand = hand.next();
-
-    System.out.print(" > 場のどこに配置しますか?: ");
-    Scanner field = new Scanner(System.in);
-    String Tfield = field.next();
-    
-    a_field[0][Integer.parseInt(Tfield)] = a_hands[Integer.parseInt(Thand)];
-    a_hands[Integer.parseInt(Thand)] = 0;
-  }
-
-  public static void attackJ(){
-    //System.out.println("相手の手を攻撃します.");
-    System.out.print(" > どのカードで攻撃しますか?: ");
-    Scanner attacker = new Scanner(System.in);
-    String attack = attacker.next();
-
-    System.out.print(" > どのカードを攻撃しますか?: ");
-    Scanner receiver = new Scanner(System.in);
-    String receive = receiver.next();
-    
-    int att = Integer.parseInt(attack);
-    int rec = Integer.parseInt(receive);
-
-    if((a_field[0][att] == 1 && b_field[0][rec] == 2) || (a_field[0][att] == 2 && b_field[0][rec] == 3) || (a_field[0][att] == 3 && b_field[0][rec] == 1)){
-      System.out.println(" > 攻撃成功");
-      b_field[0][rec] = 0;
-    }else{
-      System.out.println(" > 攻撃失敗");
-    }
-  }
-
-  public static void attackP(){
-    //System.out.println("相手のプレイヤーを攻撃します.");
-    System.out.println(" > どのカードで攻撃しますか?: ");
-    Scanner challenger = new Scanner(System.in);
-    String challenge = challenger.next();
-    b_hp = b_hp - 1;
-  }
-
-  public static void turnEnd(){
-    System.out.println("ターンを終える.");
   }
 }
