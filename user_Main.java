@@ -50,7 +50,7 @@ class user_Main extends JFrame implements ActionListener{
   public static void main(String args[]){
     user_Main frame = new user_Main();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setBounds(200, 200, 800, 600);
+    frame.setBounds(200, 200, 800, 550);
     frame.setTitle("タイトル");
     frame.setVisible(true);
     tennokoe.setText("こんにちわ");
@@ -97,6 +97,7 @@ class user_Main extends JFrame implements ActionListener{
   user_Main(){
 
     tennokoe.setFont(new Font("MS ゴシック", Font.BOLD, 20));
+    tennokoe.setAlignmentX(Component.CENTER_ALIGNMENT);    
     
     type[0] = new ImageIcon("./none.png");
     type[1] = new ImageIcon("./rock.png");
@@ -139,8 +140,10 @@ class user_Main extends JFrame implements ActionListener{
     playerB.setIcon(stateW[6]);
     playerB.addActionListener(this);
     
-    reset.addActionListener(this);
+    putally.addActionListener(this);
+    attenem.addActionListener(this);
     turnend.addActionListener(this);
+    reset.addActionListener(this);
   
     /* 対戦ページ */
     JPanel pA = new JPanel();
@@ -166,8 +169,10 @@ class user_Main extends JFrame implements ActionListener{
 
     JPanel operate = new JPanel();
     operate.setLayout(new FlowLayout());
-    operate.add(reset);
+    operate.add(putally);
+    operate.add(attenem);
     operate.add(turnend);
+    operate.add(reset);
 
     JPanel card1 = new JPanel();
     card1.setLayout(new GridLayout(0, 4));
