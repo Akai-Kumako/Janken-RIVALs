@@ -32,7 +32,7 @@ class user_Main extends JFrame implements ActionListener{
   public static int b_hp = 6;
   
   /* 操作ボタンが押されているか */
-  public static int ope[] = {0, 0, 0, 0};
+  public static int ope[] = {0, 0, 0};
 
   /* 天の声とターン数の表示ラベル */
   public static JLabel tennokoe = new JLabel();
@@ -56,7 +56,6 @@ class user_Main extends JFrame implements ActionListener{
   
   public static JButton putally = new JButton("味方を配置");
   public static JButton attenem = new JButton("敵を攻撃");
-  public static JButton turnend = new JButton("ターンを終了");
   public static JButton reset = new JButton("取り消し");
 
   public static void main(String args[]){
@@ -81,7 +80,9 @@ class user_Main extends JFrame implements ActionListener{
       turn.setText("先攻のターン (行動回数: " + noa + ")");
       tennokoe.setText("次の行動を選択してください");
       p1Turn(noa);
-      //p2Turn(noa);
+      turn.setText("後攻のターン (行動回数: " + noa + ")");
+      tennokoe.setText("次の行動を選択してください");
+      p2Turn(noa);
       noa++;
     }
     /* 成績発表のフェーズ */
@@ -93,7 +94,7 @@ class user_Main extends JFrame implements ActionListener{
       int com = -1;
       while(com == -1){
         System.out.print("");
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < 3; i++){
           if(ope[i] == 1){
             com = i;
             ope[i] = 0;
@@ -102,7 +103,6 @@ class user_Main extends JFrame implements ActionListener{
         }
       }
       if(com == 0){
-        System.out.println("KYOKO");
         int ally = -1;
         int ally_p = -1;
         int field = -1;
@@ -168,15 +168,113 @@ class user_Main extends JFrame implements ActionListener{
               }
             }
           }
+          if(b == 1){
+            b = 0;
+            b_hp--;
+            playerB.setIcon(stateW[b_hp]);
+            break;
+          }
         }
         if(field - enem == 1 || field - enem == -2){
           bField[enem_p].setIcon(type[0]);
         }
       }
       c = c - 1;
-      System.out.println(noa);
-      System.out.println(Arrays.toString(ope));
-      System.out.println(com);
+    }
+  }
+
+  public static void p2Turn(int noa){
+    int c = noa;
+    while(c != 0){
+      int com = -1;
+      while(com == -1){
+        System.out.print("");
+        for(int i = 0; i < 3; i++){
+          if(ope[i] == 1){
+            com = i;
+            ope[i] = 0;
+            break;
+          }
+        }
+      }
+      if(com == 0){
+        int ally = -1;
+        int ally_p = -1;
+        int field = -1;
+        while(ally == -1){
+          for(int i = 0; i < 10; i++){
+            if(b_hands[i] == 1){
+              ally = b_stateH[i];
+              ally_p = i;
+              bHands[i].setIcon(type[0]);
+              b_stateH[i] = 0;
+              b_hands[i] = 0;
+              break;
+            }
+          }
+        }
+        while(field == -1){
+          for(int i = 0; i < 6; i++){
+            if(b_field[i] == 1){
+              field = b_stateF[i];
+              if(field == 0){
+                b_field[i] = 0;
+                bField[i].setIcon(type[ally]);
+                b_stateF[i] = ally;
+                break;
+              }else{
+                tennokoe.setText("配置不可能です");
+                bHands[ally_p].setIcon(type[ally]);
+                b_stateH[i] = ally;
+              }
+            }
+          }
+        }
+      }
+      else if(com == 1){
+        int field = -1;
+        int field_p = -1;
+        int enem = -1;
+        int enem_p = -1;
+        while(field == -1){
+          for(int i = 0; i < 6; i++){
+            if(b_field[i] == 1){
+              field = b_stateF[i];
+              if(field != 0){
+                b_field[i] = 0;
+                field_p = i;
+                break;
+              }else{
+                tennokoe.setText("味方が配置されていません");
+              }
+            }
+          }
+        }
+        while(enem == -1){
+          for(int i = 0; i < 6; i++){
+            if(a_field[i] == 1){
+              enem = a_stateF[i];
+              if(enem != 0){
+                a_field[i] = 0;
+                enem_p = i;
+                break;
+              }else{
+                tennokoe.setText("敵が配置されていません");
+              }
+            }
+          }
+          if(a == 1){
+            a = 0;
+            a_hp--;
+            playerA.setIcon(stateM[a_hp]);
+            break;
+          }
+        }
+        if(field - enem == 1 || field - enem == -2){
+          aField[enem_p].setIcon(type[0]);
+        }
+      }
+      c = c - 1;
     }
   }
 
@@ -230,7 +328,6 @@ class user_Main extends JFrame implements ActionListener{
     
     putally.addActionListener(this);
     attenem.addActionListener(this);
-    turnend.addActionListener(this);
     reset.addActionListener(this);
   
     /* 対戦ページ */
@@ -259,7 +356,6 @@ class user_Main extends JFrame implements ActionListener{
     operate.setLayout(new FlowLayout());
     operate.add(putally);
     operate.add(attenem);
-    operate.add(turnend);
     operate.add(reset);
 
     JPanel card1 = new JPanel();
@@ -302,7 +398,7 @@ class user_Main extends JFrame implements ActionListener{
       }
       a = 0;
       b = 0;
-      for(int i = 0; i < 4; i++)
+      for(int i = 0; i < 3; i++)
         ope[i] = 0;
     }
     for(int i = 0; i < 6; i++){
@@ -329,7 +425,6 @@ class user_Main extends JFrame implements ActionListener{
     else if(btn == playerB) b = 1;
     else if(btn == putally) ope[0] = 1;
     else if(btn == attenem) ope[1] = 1;
-    else if(btn == turnend) ope[2] = 1;
-    else if(btn == reset) ope [3] = 1;
+    else if(btn == reset) ope [2] = 1;
   }
 }
