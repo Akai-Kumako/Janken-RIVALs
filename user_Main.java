@@ -102,6 +102,7 @@ class user_Main extends JFrame implements ActionListener{
         }
       }
       if(com == 0){
+        System.out.println("KYOKO");
         int ally = -1;
         int ally_p = -1;
         int field = -1;
@@ -135,17 +136,43 @@ class user_Main extends JFrame implements ActionListener{
           }
         }
       }
-      //else if(com == 1){
-      //  int field = -1;
-      //  int enem = -1;
-      //  while(field == -1){
-      //    for(int i = 0; i < 6; i++){
-      //      if(a_field[i] == 1){
-      //        field = 
-      //      }
-      //    }
-      //  }
-      //}
+      else if(com == 1){
+        int field = -1;
+        int field_p = -1;
+        int enem = -1;
+        int enem_p = -1;
+        while(field == -1){
+          for(int i = 0; i < 6; i++){
+            if(a_field[i] == 1){
+              field = a_stateF[i];
+              if(field != 0){
+                a_field[i] = 0;
+                field_p = i;
+                break;
+              }else{
+                tennokoe.setText("味方が配置されていません");
+              }
+            }
+          }
+        }
+        while(enem == -1){
+          for(int i = 0; i < 6; i++){
+            if(b_field[i] == 1){
+              enem = b_stateF[i];
+              if(enem != 0){
+                b_field[i] = 0;
+                enem_p = i;
+                break;
+              }else{
+                tennokoe.setText("敵が配置されていません");
+              }
+            }
+          }
+        }
+        if(field - enem == 1 || field - enem == -2){
+          bField[enem_p].setIcon(type[0]);
+        }
+      }
       c = c - 1;
       System.out.println(noa);
       System.out.println(Arrays.toString(ope));
