@@ -92,6 +92,7 @@ class user_Main extends JFrame implements ActionListener{
     while(c != 0){
       int com = -1;
       while(com == -1){
+        System.out.print("");
         for(int i = 0; i < 4; i++){
           if(ope[i] == 1){
             com = i;
@@ -101,29 +102,49 @@ class user_Main extends JFrame implements ActionListener{
         }
       }
       if(com == 0){
-        boolean end = true;
         int ally = -1;
+        int ally_p = -1;
         int field = -1;
-        while(end){
-          while(ally == -1){
-            
+        while(ally == -1){
+          for(int i = 0; i < 10; i++){
+            if(a_hands[i] == 1){
+              ally = a_stateH[i];
+              ally_p = i;
+              aHands[i].setIcon(type[0]);
+              a_stateH[i] = 0;
+              a_hands[i] = 0;
+              break;
+            }
           }
-          while(field){
-            
+        }
+        while(field == -1){
+          for(int i = 0; i < 6; i++){
+            if(a_field[i] == 1){
+              field = a_stateF[i];
+              if(field == 0){
+                a_field[i] = 0;
+                aField[i].setIcon(type[ally]);
+                a_stateF[i] = ally;
+                break;
+              }else{
+                tennokoe.setText("配置不可能です");
+                aHands[ally_p].setIcon(type[ally]);
+                a_stateH[i] = ally;
+              }
+            }
           }
         }
       }
-
       //else if(com == 1){
-
-      //}
-
-      //else if(com == 2){
-
-      //}
-
-      //else if(com == 3){
-
+      //  int field = -1;
+      //  int enem = -1;
+      //  while(field == -1){
+      //    for(int i = 0; i < 6; i++){
+      //      if(a_field[i] == 1){
+      //        field = 
+      //      }
+      //    }
+      //  }
       //}
       c = c - 1;
       System.out.println(noa);
