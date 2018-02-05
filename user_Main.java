@@ -11,29 +11,41 @@ class user_Main extends JFrame implements ActionListener{
   JPanel panel;
   CardLayout layout;
 
+  /* どのボタンが押されているか */
   public static int a_hands[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   public static int b_hands[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   public static int a_field[] = {0, 0, 0, 0, 0, 0};
   public static int b_field[] = {0, 0, 0, 0, 0, 0};
   
+  /* 現在どういうステータスか(0: none, 1: rock, 2: paper, 3:scissors) */
   public static int a_stateH[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   public static int b_stateH[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   public static int a_stateF[] = {0, 0, 0, 0, 0, 0};
   public static int b_stateF[] = {0, 0, 0, 0, 0, 0};
-  
+ 
+  /* プレイヤーボタンが押されているか */
   public static int a = 0;
   public static int b = 0;
 
+  /* プレイヤーのHP */
   public static int a_hp = 6;
   public static int b_hp = 6;
   
-  public static JLabel tennokoe = new JLabel("ooo");
+  /* 操作ボタンが押されているか */
+  public static int ope[] = {0, 0, 0, 0};
 
+  /* 天の声とターン数の表示ラベル */
+  public static JLabel tennokoe = new JLabel();
+  public static JLabel turn = new JLabel();
+
+  /* じゃんけんの手のイメージアイコン */
   public static ImageIcon[] type = new ImageIcon[4];
 
+  /* プレイヤーのステータスイメージアイコン(W0-W6, M0-M6) */
   public static ImageIcon[] stateW = new ImageIcon[7];
   public static ImageIcon[] stateM = new ImageIcon[7];
 
+  /* 画面にボタンを設置する */
   public static JButton[] aField = new JButton[6];
   public static JButton[] bField = new JButton[6];
   public static JButton[] aHands = new JButton[10];
@@ -50,11 +62,10 @@ class user_Main extends JFrame implements ActionListener{
   public static void main(String args[]){
     user_Main frame = new user_Main();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setBounds(200, 200, 800, 550);
-    frame.setTitle("タイトル");
+    frame.setBounds(200, 200, 800, 600);
+    frame.setTitle("JankenRIVALs");
     frame.setVisible(true);
-    tennokoe.setText("こんにちわ");
-    /* 手札の設定 */
+    /* 手札の設定のフェーズ */
     for(int i = 0; i < 10; i++){
       int a = (int)(Math.random() * 3 + 1);
       int b = (int)(Math.random() * 3 + 1);
@@ -63,34 +74,61 @@ class user_Main extends JFrame implements ActionListener{
       bHands[i].setIcon(type[b]);
       b_stateH[i] = b;
     }
-    boolean hand = false;
-    int id = 0;
+    /* 実際に戦うフェーズ */
+    /* noa は 攻撃可能回数 */
+    int noa = 1;
     while(a_hp != 0 && b_hp != 0){
-      for(int i = 0; i < 10; i++){
-        if(a_hands[i] == 1){
-          aHands[i].setIcon(type[0]);
-          hand = true;
-          id = i;
-          break;
-        }if(b_hands[i] == 1){
-          bHands[i].setIcon(type[0]);
-          hand = true;
-          id = i;
-          break;
-        }
-      }
-      if(hand == true){
-        for(int i = 0; i < 6; i++){
-          if(a_field[i] == 1){
-            aField[i].setIcon(type[a_stateH[id]]);
-            break;
-          }
-          if(a_field[i] == 1){
-            aField[i].setIcon(type[a_stateH[id]]);
+      turn.setText("先攻のターン (行動回数: " + noa + ")");
+      tennokoe.setText("次の行動を選択してください");
+      p1Turn(noa);
+      //p2Turn(noa);
+      noa++;
+    }
+    /* 成績発表のフェーズ */
+  }
+
+  public static void p1Turn(int noa){
+    int c = noa;
+    while(c != 0){
+      int com = -1;
+      while(com == -1){
+        for(int i = 0; i < 4; i++){
+          if(ope[i] == 1){
+            com = i;
+            ope[i] = 0;
             break;
           }
         }
       }
+      if(com == 0){
+        boolean end = true;
+        int ally = -1;
+        int field = -1;
+        while(end){
+          while(ally == -1){
+            
+          }
+          while(field){
+            
+          }
+        }
+      }
+
+      //else if(com == 1){
+
+      //}
+
+      //else if(com == 2){
+
+      //}
+
+      //else if(com == 3){
+
+      //}
+      c = c - 1;
+      System.out.println(noa);
+      System.out.println(Arrays.toString(ope));
+      System.out.println(com);
     }
   }
 
@@ -98,6 +136,8 @@ class user_Main extends JFrame implements ActionListener{
 
     tennokoe.setFont(new Font("MS ゴシック", Font.BOLD, 20));
     tennokoe.setAlignmentX(Component.CENTER_ALIGNMENT);    
+    turn.setFont(new Font("MS ゴシック", Font.BOLD, 20));
+    turn.setAlignmentX(Component.CENTER_ALIGNMENT);    
     
     type[0] = new ImageIcon("./none.png");
     type[1] = new ImageIcon("./rock.png");
@@ -183,6 +223,7 @@ class user_Main extends JFrame implements ActionListener{
 
     JPanel all = new JPanel();
     all.setLayout(new BoxLayout(all, BoxLayout.Y_AXIS));
+    all.add(turn);
     all.add(tennokoe);
     all.add(card1);
     all.add(hands);
@@ -213,6 +254,8 @@ class user_Main extends JFrame implements ActionListener{
       }
       a = 0;
       b = 0;
+      for(int i = 0; i < 4; i++)
+        ope[i] = 0;
     }
     for(int i = 0; i < 6; i++){
       if(btn == aField[i]){
@@ -236,5 +279,9 @@ class user_Main extends JFrame implements ActionListener{
     }
     if(btn == playerA) a = 1;
     else if(btn == playerB) b = 1;
+    else if(btn == putally) ope[0] = 1;
+    else if(btn == attenem) ope[1] = 1;
+    else if(btn == turnend) ope[2] = 1;
+    else if(btn == reset) ope [3] = 1;
   }
 }
